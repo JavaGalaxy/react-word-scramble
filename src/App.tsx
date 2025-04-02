@@ -3,15 +3,14 @@ import "./App.css";
 import { getInitialState, reducer } from "./appState";
 
 function App() {
-
-  const [state, dispatch] = useReducer(reducer, null, getInitialState)
+  const [state, dispatch] = useReducer(reducer, null, getInitialState);
 
   let content = null;
 
-  switch(state.phase) {
+  switch (state.phase) {
     case "pre-game": {
       content = (
-        <button onClick={() => dispatch({type: "start-game"})}>
+        <button onClick={() => dispatch({ type: "start-game" })}>
           Begin new game
         </button>
       );
@@ -28,8 +27,8 @@ function App() {
               <input
                 type="text"
                 value={state.guess}
-                onChange={(ev) => 
-                  dispatch({type: "update-guess", newGuess: ev.target.value})
+                onChange={(ev) =>
+                  dispatch({ type: "update-guess", newGuess: ev.target.value })
                 }
               />
             </label>
@@ -43,7 +42,7 @@ function App() {
       content = (
         <>
           <div>Nice game! You guessed {state.goal}</div>
-          <button onClick={() => dispatch({type: "start-game"})}>
+          <button onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
           </button>
         </>
