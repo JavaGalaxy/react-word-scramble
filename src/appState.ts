@@ -48,6 +48,12 @@ export type Action = LoadDataAction | StartGameAction | UpdateGuessAction;
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case "load-data":{
+      return {
+        ...state,
+        wordPack: action.wordPack,
+      }
+    }
     case "start-game": {
       if (state.phase === "in-game" || !state.wordPack) {
         return state;
