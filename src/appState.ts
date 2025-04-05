@@ -72,7 +72,10 @@ export const reducer = (state: State, action: Action): State => {
         return state;
       }
 
-      if (action.newGuess === state.goal) {
+      const normalizedGuess = action.newGuess.toLowerCase().trim().replaceAll(/\s+/g, ' ');
+      const normalizedGoal = state.goal.toLowerCase().trim().replace(/\s+/g, ' ');
+
+      if (normalizedGuess === normalizedGoal) {
         return { phase: "post-game", goal: state.goal, wordPack: state.wordPack };
       }
 
