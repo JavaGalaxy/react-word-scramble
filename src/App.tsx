@@ -90,7 +90,19 @@ function App() {
   return (
     <div className="App">
       {content}
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      <pre>
+        {JSON.stringify(
+          state,
+          (key, value) => {
+            if (key === "wordPack") {
+              return "";
+            } else {
+              return value;
+            }
+          },
+          2,
+        )}
+      </pre>
     </div>
   );
 }
