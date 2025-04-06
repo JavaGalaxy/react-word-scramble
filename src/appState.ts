@@ -1,4 +1,15 @@
+import { getNormalizedWord } from "./util/getNormalizedWord";
 import { getRandomElement } from "./util/getRandomElement";
+import { getScrambledWord } from "./util/getScarmbledWord";
+
+function getGoalAndScrambledGoal(wordPack: readonly string[]): {
+  goal: string;
+  scrambledGoal: string;
+} {
+  const goal = getRandomElement(wordPack);
+  const scrambledGoal = getScrambledWord(goal);
+  return { goal, scrambledGoal };
+}
 
 export type Phase = "pre-game" | "in-game" | "post-game";
 
@@ -17,6 +28,7 @@ export interface InGameState extends BaseState {
   guess: string;
   wordPack: readonly string[];
   wordsGuessed: number;
+  scrambledGoal: string;
 }
 
 export interface PostGameState extends BaseState {
@@ -24,6 +36,7 @@ export interface PostGameState extends BaseState {
   goal: string;
   wordPack: readonly string[];
   wordsGuessed: number;
+  scrambledGoal: string;
 }
 
 export type State = PreGameState | InGameState | PostGameState;
@@ -72,8 +85,8 @@ export const reducer = (state: State, action: Action): State => {
       return {
         phase: "in-game",
         wordPack: state.wordPack,
-        goal: getRandomElement(state.wordPack),
         guess: "",
+        ...getGoalAndScrambledGoal(state.wordPack),
         wordsGuessed: 0,
       };
     }
@@ -83,20 +96,14 @@ export const reducer = (state: State, action: Action): State => {
         return state;
       }
 
-      const normalizedGuess = action.newGuess
-        .toLowerCase()
-        .trim()
-        .replaceAll(/\s+/g, " ");
-      const normalizedGoal = state.goal
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, " ");
+      const normalizedGuess = getNormalizedWord(action.newGuess);
+      const normalizedGoal = getNormalizedWord(state.goal);
 
       if (normalizedGuess === normalizedGoal) {
         return {
           ...state,
-          goal: getRandomElement(state.wordPack),
           guess: "",
+          ...getGoalAndScrambledGoal(state.wordPack),
           wordsGuessed: state.wordsGuessed + 1,
         };
       }
@@ -114,6 +121,7 @@ export const reducer = (state: State, action: Action): State => {
         goal: state.goal,
         wordPack: state.wordPack,
         wordsGuessed: state.wordsGuessed,
+        scrambledGoal: state.scrambledGoal,
       };
     }
   }

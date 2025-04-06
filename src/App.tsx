@@ -47,7 +47,7 @@ function App() {
       content = (
         <>
           <div>Words Guessed: {state.wordsGuessed}</div>
-          <div> Goal: {state.goal}</div>
+          <div> Goal: {state.scrambledGoal}</div>
           <div>
             <label>
               Guess:
