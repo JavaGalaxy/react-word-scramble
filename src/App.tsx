@@ -10,22 +10,22 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/fruits.txt")
+        const response = await fetch("/fruits.txt");
         const text = await response.text();
 
         const wordPack = text
-                  .split("\n")
-                  .map(word => word.trim())
-                  .filter(Boolean);
-        
+          .split("\n")
+          .map((word) => word.trim())
+          .filter(Boolean);
+
         setTimeout(() => {
           dispatch({ type: "load-data", wordPack });
         }, 3000);
       } catch (err) {
         console.error(err);
       }
-    }
-    
+    };
+
     fetchData();
   }, []);
 
@@ -35,17 +35,18 @@ function App() {
         content = <>Loading data...</>;
         break;
       }
-        content = (
-          <button onClick={() => dispatch({ type: "start-game" })}>
-            Begin new game
-          </button>
-        );
+      content = (
+        <button onClick={() => dispatch({ type: "start-game" })}>
+          Begin new game
+        </button>
+      );
       break;
     }
 
     case "in-game": {
       content = (
         <>
+          <div>Words Guessed: {state.wordsGuessed}</div>
           <div> Goal: {state.goal}</div>
           <div>
             <label>
@@ -59,6 +60,11 @@ function App() {
               />
             </label>
           </div>
+          <div>
+            <button onClick={() => dispatch({ type: "end-game" })}>
+              End Game
+            </button>
+          </div>
         </>
       );
       break;
@@ -67,7 +73,11 @@ function App() {
     case "post-game": {
       content = (
         <>
-          <div>Nice game! You guessed {state.goal}</div>
+          <div>
+            Game Over! Your guessed {state.wordsGuessed}{" "}
+            {state.wordsGuessed === 1 ? "word" : "words"} correctly!
+          </div>
+          <div>Your last word was: {state.goal}</div>
           <button onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
           </button>
