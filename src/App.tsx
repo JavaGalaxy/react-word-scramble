@@ -46,6 +46,7 @@ function App() {
     case "in-game": {
       content = (
         <>
+          <div>Words Guessed: {state.wordsGuessed}</div>
           <div> Goal: {state.goal}</div>
           <div>
             <label>
@@ -59,6 +60,11 @@ function App() {
               />
             </label>
           </div>
+          <div>
+            <button onClick={() => dispatch({ type: "end-game" })}>
+              End Game
+            </button>
+          </div>
         </>
       );
       break;
@@ -67,7 +73,8 @@ function App() {
     case "post-game": {
       content = (
         <>
-          <div>Nice game! You guessed {state.goal}</div>
+          <div>Game Over! Your guessed {state.wordsGuessed} words correctly!</div>
+          <div>Your last word was: {state.goal}</div>
           <button onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
           </button>

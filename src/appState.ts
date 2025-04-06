@@ -16,12 +16,14 @@ export interface InGameState extends BaseState {
   goal: string;
   guess: string;
   wordPack: readonly string[];
+  wordsGuessed: number;
 }
 
 export interface PostGameState extends BaseState {
   phase: "post-game";
   goal: string;
   wordPack: readonly string[];
+  wordsGuessed: number;
 }
 
 export type State = PreGameState | InGameState | PostGameState;
@@ -44,7 +46,11 @@ export type UpdateGuessAction = {
   newGuess: string;
 };
 
-export type Action = LoadDataAction | StartGameAction | UpdateGuessAction;
+export type EndGameAction = {
+  type: "end-game";
+}
+
+export type Action = LoadDataAction | StartGameAction | UpdateGuessAction | EndGameAction;
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -64,6 +70,7 @@ export const reducer = (state: State, action: Action): State => {
         wordPack: state.wordPack,
         goal: getRandomElement(state.wordPack),
         guess: "",
+        wordsGuessed: 0,
       };
     }
 
@@ -76,10 +83,28 @@ export const reducer = (state: State, action: Action): State => {
       const normalizedGoal = state.goal.toLowerCase().trim().replace(/\s+/g, ' ');
 
       if (normalizedGuess === normalizedGoal) {
-        return { phase: "post-game", goal: state.goal, wordPack: state.wordPack };
+        return {
+          ...state,
+          goal: getRandomElement(state.wordPack),
+          guess: "",
+          wordsGuessed: state.wordsGuessed + 1,
+        }
       }
 
       return { ...state, guess: action.newGuess };
+    }
+
+    case "end-game": {
+      if(state.phase !== "in-game"){
+        return state;
+      }
+
+      return {
+        phase: "post-game",
+        goal: state.goal,
+        wordPack: state.wordPack,
+        wordsGuessed: state.wordsGuessed,
+      }
     }
   }
 
