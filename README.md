@@ -1,46 +1,88 @@
-# Getting Started with Create React App
+# React Word Scramble
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A fun, interactive word scramble game built with React where players unscramble words against the clock.
 
-## Available Scripts
+## 🎮 Features
 
-In the project directory, you can run:
+- Word scrambling with adjustable difficulty
+- Score tracking for correct guesses
+- Option to skip difficult words
+- Game history to track performance
+- End-game summary with statistics
 
-### `yarn start`
+## 🚀 Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Prerequisites
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Node.js (v14 or later)
+- npm or yarn
 
-### `yarn test`
+### Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository:
+   ```
+   git clone https://github.com/JavaGalaxy/react-word-scramble.git
+   cd react-word-scramble
+   ```
 
-### `yarn build`
+2. Install dependencies:
+   ```
+   npm install
+   ```
+   or
+   ```
+    yarn
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Start the development server:
+   ```
+   npm start
+   ```
+   or
+   ```
+   yarn start
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Open [http://localhost:3000](http://localhost:3000) to view the game in your browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📖 How to Play
 
-### `yarn eject`
+1. Press the "Begin new game" button to start
+2. A scrambled word will appear
+3. Type your guess in the input field
+4. If your guess is correct, you'll get a new word and your score increases
+5. If a word is too difficult, click "Skip Word" to move to the next one
+6. End the game at any time with the "End Game" button
+7. View your performance in the end-game summary
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 🏗️ Project Structure
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `src/App.tsx` - Main application component
+- `src/appState.ts` - State management with reducer pattern
+- `public/fruits.txt` - Source word list
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 🧪 Running Tests
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+npm test
+```
+or
+```bash
+yarn test
+```
 
-## Learn More
+## 🔮 Future Enhancements
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Timer-based gameplay
+- Difficulty levels
+- Multiplayer mode
+- High score leaderboard
+- Word categories
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
