@@ -5,11 +5,11 @@ beforeEach(() => {
   jest.clearAllMocks();
   jest.resetModules();
   jest.useFakeTimers();
-  
-  global.fetch = jest.fn(() => 
+
+  global.fetch = jest.fn(() =>
     Promise.resolve({
-      text: () => Promise.resolve("apple\nbanana\ncherry")
-    })
+      text: () => Promise.resolve("apple\nbanana\ncherry"),
+    }),
   ) as jest.Mock;
 });
 
@@ -24,18 +24,21 @@ test("displays loading state initially", () => {
 
 test("shows begin button after data loads", async () => {
   render(<App />);
-  
+
   expect(screen.getByText(/loading data/i)).toBeInTheDocument();
-  
+
   await act(async () => {
     await Promise.resolve();
   });
-  
+
   act(() => {
     jest.advanceTimersByTime(3000);
   });
-  
-  await waitFor(() => {
-    expect(screen.getByText(/begin new game/i)).toBeInTheDocument();
-  }, { timeout: 1000 });
+
+  await waitFor(
+    () => {
+      expect(screen.getByText(/begin new game/i)).toBeInTheDocument();
+    },
+    { timeout: 1000 },
+  );
 });

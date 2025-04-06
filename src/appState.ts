@@ -35,7 +35,7 @@ export const getInitialState = (): State => {
 export type LoadDataAction = {
   type: "load-data";
   wordPack: readonly string[];
-}
+};
 
 export type StartGameAction = {
   type: "start-game";
@@ -48,17 +48,21 @@ export type UpdateGuessAction = {
 
 export type EndGameAction = {
   type: "end-game";
-}
+};
 
-export type Action = LoadDataAction | StartGameAction | UpdateGuessAction | EndGameAction;
+export type Action =
+  | LoadDataAction
+  | StartGameAction
+  | UpdateGuessAction
+  | EndGameAction;
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "load-data":{
+    case "load-data": {
       return {
         ...state,
         wordPack: action.wordPack,
-      }
+      };
     }
     case "start-game": {
       if (state.phase === "in-game" || !state.wordPack) {
@@ -79,8 +83,14 @@ export const reducer = (state: State, action: Action): State => {
         return state;
       }
 
-      const normalizedGuess = action.newGuess.toLowerCase().trim().replaceAll(/\s+/g, ' ');
-      const normalizedGoal = state.goal.toLowerCase().trim().replace(/\s+/g, ' ');
+      const normalizedGuess = action.newGuess
+        .toLowerCase()
+        .trim()
+        .replaceAll(/\s+/g, " ");
+      const normalizedGoal = state.goal
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ");
 
       if (normalizedGuess === normalizedGoal) {
         return {
@@ -88,14 +98,14 @@ export const reducer = (state: State, action: Action): State => {
           goal: getRandomElement(state.wordPack),
           guess: "",
           wordsGuessed: state.wordsGuessed + 1,
-        }
+        };
       }
 
       return { ...state, guess: action.newGuess };
     }
 
     case "end-game": {
-      if(state.phase !== "in-game"){
+      if (state.phase !== "in-game") {
         return state;
       }
 
@@ -104,7 +114,7 @@ export const reducer = (state: State, action: Action): State => {
         goal: state.goal,
         wordPack: state.wordPack,
         wordsGuessed: state.wordsGuessed,
-      }
+      };
     }
   }
 
