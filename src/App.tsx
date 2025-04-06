@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import "./App.css";
-import { getInitialState, reducer, ResultStats } from "./appState";
+import { getInitialState, reducer } from "./appState";
+import { GameResultsList } from "./components/GameResultsList";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
@@ -70,16 +71,7 @@ function App() {
             </button>
           </div>
           
-          {state.result.length > 0 && (
-            <div className="game-history">
-              <h3>Game Result</h3>
-                {state.result.map((resultItem: ResultStats, index: number) => (
-                  <li key={index}>
-                    {resultItem.word} - {resultItem.guessed ? "Guessed correctly" : "Skipped"}
-                  </li>
-                ))}
-            </div>
-          )}
+          <GameResultsList results={state.result} />
         </>
       );
       break;
@@ -94,16 +86,7 @@ function App() {
           </div>
           <div>Your last word was: {state.goal}</div>
           
-          {state.result.length > 0 && (
-            <div className="game-history">
-              <h3>Game Summary</h3>
-                {state.result.map((resultItem: ResultStats, index: number) => (
-                  <li key={index}>
-                    {resultItem.word} - {resultItem.guessed ? "Guessed correctly" : "Skipped"}
-                  </li>
-                ))}
-            </div>
-          )}
+          <GameResultsList results={state.result} />
           
           <button onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
