@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import "./App.css";
-import { getInitialState, reducer } from "./appState";
+import { getInitialState, reducer, ResultStats } from "./appState";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
@@ -47,7 +47,8 @@ function App() {
       content = (
         <>
           <div>Words Guessed: {state.wordsGuessed}</div>
-          <div> Goal: {state.scrambledGoal}</div>
+          <div>Words Skipped: {state.wordsSkipped}</div>
+          <div>Goal: {state.scrambledGoal}</div>
           <div>
             <label>
               Guess:
@@ -60,11 +61,25 @@ function App() {
               />
             </label>
           </div>
-          <div>
+          <div className="button-group">
+            <button onClick={() => dispatch({ type: "skip-word" })}>
+              Skip Word
+            </button>
             <button onClick={() => dispatch({ type: "end-game" })}>
               End Game
             </button>
           </div>
+          
+          {state.result.length > 0 && (
+            <div className="game-history">
+              <h3>Game Result</h3>
+                {state.result.map((resultItem: ResultStats, index: number) => (
+                  <li key={index}>
+                    {resultItem.word} - {resultItem.guessed ? "Guessed correctly" : "Skipped"}
+                  </li>
+                ))}
+            </div>
+          )}
         </>
       );
       break;
@@ -74,10 +89,22 @@ function App() {
       content = (
         <>
           <div>
-            Game Over! Your guessed {state.wordsGuessed}{" "}
+            Game Over! You guessed {state.wordsGuessed}{" "}
             {state.wordsGuessed === 1 ? "word" : "words"} correctly!
           </div>
           <div>Your last word was: {state.goal}</div>
+          
+          {state.result.length > 0 && (
+            <div className="game-history">
+              <h3>Game Summary</h3>
+                {state.result.map((resultItem: ResultStats, index: number) => (
+                  <li key={index}>
+                    {resultItem.word} - {resultItem.guessed ? "Guessed correctly" : "Skipped"}
+                  </li>
+                ))}
+            </div>
+          )}
+          
           <button onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
           </button>
