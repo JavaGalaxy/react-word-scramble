@@ -20,25 +20,32 @@ A fun, interactive word scramble game built with React where players unscramble 
 ### Installation
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/JavaGalaxy/react-word-scramble.git
    cd react-word-scramble
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
+
    or
+
    ```
     yarn
    ```
 
 3. Start the development server:
+
    ```
    npm start
    ```
+
    or
+
    ```
    yarn start
    ```
@@ -66,7 +73,9 @@ A fun, interactive word scramble game built with React where players unscramble 
 ```bash
 npm test
 ```
+
 or
+
 ```bash
 yarn test
 ```

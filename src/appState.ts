@@ -66,7 +66,7 @@ export type StartGameAction = {
 export type UpdateGuessAction = {
   type: "update-guess";
   newGuess: string;
-};  
+};
 
 export type SkipWordAction = {
   type: "skip-word";
@@ -133,14 +133,14 @@ export const reducer = (state: State, action: Action): State => {
     }
 
     case "skip-word": {
-      if(state.phase !== "in-game"){
+      if (state.phase !== "in-game") {
         return state;
       }
 
       const updatedResult = [
         ...state.result,
-        { word: state.goal, guessed: false, skipped: true}
-      ]
+        { word: state.goal, guessed: false, skipped: true },
+      ];
 
       return {
         ...state,
@@ -148,7 +148,7 @@ export const reducer = (state: State, action: Action): State => {
         ...getGoalAndScrambledGoal(state.wordPack),
         wordsSkipped: state.wordsSkipped + 1,
         result: updatedResult,
-      }
+      };
     }
 
     case "end-game": {
