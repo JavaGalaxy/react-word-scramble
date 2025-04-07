@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import "./App.css";
 import { getInitialState, reducer } from "./appState";
 import { GameResultsList } from "./components/GameResultsList";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
+  const guessInputRef = useRef<HTMLInputElement>(null);
 
   let content = null;
 
@@ -30,6 +31,12 @@ function App() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if(state.phase === "in-game" ){
+      guessInputRef.current?.focus();
+    }
+  }, [state.phase]);
+
   switch (state.phase) {
     case "pre-game": {
       if (state.wordPack == null) {
@@ -54,7 +61,9 @@ function App() {
             <label>
               Guess:
               <input
+                ref={guessInputRef}
                 type="text"
+                style={{ textTransform: "uppercase" }}
                 value={state.guess}
                 onChange={(ev) =>
                   dispatch({ type: "update-guess", newGuess: ev.target.value })
@@ -63,7 +72,10 @@ function App() {
             </label>
           </div>
           <div className="button-group">
-            <button onClick={() => dispatch({ type: "skip-word" })}>
+            <button onClick={() => {
+              dispatch({ type: "skip-word" })
+                guessInputRef.current?.focus();
+              }}>
               Skip Word
             </button>
             <button onClick={() => dispatch({ type: "end-game" })}>
@@ -88,7 +100,7 @@ function App() {
           
           <GameResultsList results={state.result} />
           
-          <button onClick={() => dispatch({ type: "start-game" })}>
+          <button autoFocus onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
           </button>
         </>
