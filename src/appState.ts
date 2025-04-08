@@ -7,7 +7,12 @@ function getGoalAndScrambledGoal(wordPack: readonly string[]): {
   scrambledGoal: string;
 } {
   const goal = getRandomElement(wordPack);
-  const scrambledGoal = getScrambledWord(goal);
+  let scrambledGoal = getScrambledWord(goal);
+
+  while (scrambledGoal === goal) {
+    scrambledGoal = getScrambledWord(goal);
+  }
+
   return { goal, scrambledGoal };
 }
 
