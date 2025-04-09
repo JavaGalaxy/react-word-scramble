@@ -1,9 +1,11 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import "./App.css";
 import { getInitialState, reducer } from "./appState";
+import { GameResultsList } from "./components/GameResultsList";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
+  const guessInputRef = useRef<HTMLInputElement>(null);
 
   let content = null;
 
@@ -29,6 +31,12 @@ function App() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (state.phase === "in-game") {
+      guessInputRef.current?.focus();
+    }
+  }, [state.phase]);
+
   switch (state.phase) {
     case "pre-game": {
       if (state.wordPack == null) {
@@ -47,12 +55,15 @@ function App() {
       content = (
         <>
           <div>Words Guessed: {state.wordsGuessed}</div>
-          <div> Goal: {state.goal}</div>
+          <div>Words Skipped: {state.wordsSkipped}</div>
+          <div>Goal: {state.scrambledGoal}</div>
           <div>
             <label>
               Guess:
               <input
+                ref={guessInputRef}
                 type="text"
+                style={{ textTransform: "uppercase" }}
                 value={state.guess}
                 onChange={(ev) =>
                   dispatch({ type: "update-guess", newGuess: ev.target.value })
@@ -60,11 +71,21 @@ function App() {
               />
             </label>
           </div>
-          <div>
+          <div className="button-group">
+            <button
+              onClick={() => {
+                dispatch({ type: "skip-word" });
+                guessInputRef.current?.focus();
+              }}
+            >
+              Skip Word
+            </button>
             <button onClick={() => dispatch({ type: "end-game" })}>
               End Game
             </button>
           </div>
+
+          <GameResultsList results={state.result} />
         </>
       );
       break;
@@ -74,11 +95,14 @@ function App() {
       content = (
         <>
           <div>
-            Game Over! Your guessed {state.wordsGuessed}{" "}
+            Game Over! You guessed {state.wordsGuessed}{" "}
             {state.wordsGuessed === 1 ? "word" : "words"} correctly!
           </div>
           <div>Your last word was: {state.goal}</div>
-          <button onClick={() => dispatch({ type: "start-game" })}>
+
+          <GameResultsList results={state.result} />
+
+          <button autoFocus onClick={() => dispatch({ type: "start-game" })}>
             Begin new game
           </button>
         </>
@@ -90,7 +114,19 @@ function App() {
   return (
     <div className="App">
       {content}
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      <pre>
+        {JSON.stringify(
+          state,
+          (key, value) => {
+            if (key === "wordPack") {
+              return "";
+            } else {
+              return value;
+            }
+          },
+          2,
+        )}
+      </pre>
     </div>
   );
 }

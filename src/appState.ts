@@ -1,9 +1,31 @@
+import { getNormalizedWord } from "./util/getNormalizedWord";
 import { getRandomElement } from "./util/getRandomElement";
+import { getScrambledWord } from "./util/getScarmbledWord";
+
+function getGoalAndScrambledGoal(wordPack: readonly string[]): {
+  goal: string;
+  scrambledGoal: string;
+} {
+  const goal = getRandomElement(wordPack);
+  let scrambledGoal = getScrambledWord(goal);
+
+  while (scrambledGoal === goal) {
+    scrambledGoal = getScrambledWord(goal);
+  }
+
+  return { goal, scrambledGoal };
+}
 
 export type Phase = "pre-game" | "in-game" | "post-game";
 
 export interface BaseState {
   phase: Phase;
+}
+
+export interface ResultStats {
+  word: string;
+  guessed: boolean;
+  skipped: boolean;
 }
 
 export interface PreGameState extends BaseState {
@@ -17,6 +39,9 @@ export interface InGameState extends BaseState {
   guess: string;
   wordPack: readonly string[];
   wordsGuessed: number;
+  wordsSkipped: number;
+  scrambledGoal: string;
+  result: ResultStats[];
 }
 
 export interface PostGameState extends BaseState {
@@ -24,6 +49,8 @@ export interface PostGameState extends BaseState {
   goal: string;
   wordPack: readonly string[];
   wordsGuessed: number;
+  scrambledGoal: string;
+  result: ResultStats[];
 }
 
 export type State = PreGameState | InGameState | PostGameState;
@@ -46,6 +73,10 @@ export type UpdateGuessAction = {
   newGuess: string;
 };
 
+export type SkipWordAction = {
+  type: "skip-word";
+};
+
 export type EndGameAction = {
   type: "end-game";
 };
@@ -54,6 +85,7 @@ export type Action =
   | LoadDataAction
   | StartGameAction
   | UpdateGuessAction
+  | SkipWordAction
   | EndGameAction;
 
 export const reducer = (state: State, action: Action): State => {
@@ -72,9 +104,11 @@ export const reducer = (state: State, action: Action): State => {
       return {
         phase: "in-game",
         wordPack: state.wordPack,
-        goal: getRandomElement(state.wordPack),
         guess: "",
+        ...getGoalAndScrambledGoal(state.wordPack),
         wordsGuessed: 0,
+        wordsSkipped: 0,
+        result: [],
       };
     }
 
@@ -83,25 +117,43 @@ export const reducer = (state: State, action: Action): State => {
         return state;
       }
 
-      const normalizedGuess = action.newGuess
-        .toLowerCase()
-        .trim()
-        .replaceAll(/\s+/g, " ");
-      const normalizedGoal = state.goal
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, " ");
+      const normalizedGuess = getNormalizedWord(action.newGuess);
+      const normalizedGoal = getNormalizedWord(state.goal);
 
       if (normalizedGuess === normalizedGoal) {
+        const updatedResult = [
+          ...state.result,
+          { word: state.goal, guessed: true, skipped: false },
+        ];
         return {
           ...state,
-          goal: getRandomElement(state.wordPack),
           guess: "",
+          ...getGoalAndScrambledGoal(state.wordPack),
           wordsGuessed: state.wordsGuessed + 1,
+          result: updatedResult,
         };
       }
 
       return { ...state, guess: action.newGuess };
+    }
+
+    case "skip-word": {
+      if (state.phase !== "in-game") {
+        return state;
+      }
+
+      const updatedResult = [
+        ...state.result,
+        { word: state.goal, guessed: false, skipped: true },
+      ];
+
+      return {
+        ...state,
+        guess: "",
+        ...getGoalAndScrambledGoal(state.wordPack),
+        wordsSkipped: state.wordsSkipped + 1,
+        result: updatedResult,
+      };
     }
 
     case "end-game": {
@@ -114,6 +166,8 @@ export const reducer = (state: State, action: Action): State => {
         goal: state.goal,
         wordPack: state.wordPack,
         wordsGuessed: state.wordsGuessed,
+        scrambledGoal: state.scrambledGoal,
+        result: state.result,
       };
     }
   }
