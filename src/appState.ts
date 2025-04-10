@@ -2,15 +2,32 @@ import { getNormalizedWord } from "./util/getNormalizedWord";
 import { getRandomElement } from "./util/getRandomElement";
 import { getScrambledWord } from "./util/getScarmbledWord";
 
-function getGoalAndScrambledGoal(wordPack: readonly string[]): {
+const containsBannedWord = (str: string, bannedWords: readonly string[] | null): boolean => {
+  if (!bannedWords) return false;
+  return bannedWords.some((bannedWord) =>
+    getNormalizedWord(str).includes(getNormalizedWord(bannedWord))
+  );
+};
+
+function getGoalAndScrambledGoal(wordPack: readonly string[], bannedWords: readonly string[] | null): {
   goal: string;
   scrambledGoal: string;
 } {
+
   const goal = getRandomElement(wordPack);
   let scrambledGoal = getScrambledWord(goal);
 
-  while (scrambledGoal === goal) {
-    scrambledGoal = getScrambledWord(goal);
+  for(let i=0; i < 10; i++){
+    const goal = getRandomElement(wordPack);
+    let scrambledGoal = getScrambledWord(goal);
+
+    if(scrambledGoal === goal){
+      continue;
+    }
+
+    if(containsBannedWord(scrambledGoal, bannedWords)){
+      continue;
+    }
   }
 
   return { goal, scrambledGoal };
@@ -31,6 +48,7 @@ export interface ResultStats {
 export interface PreGameState extends BaseState {
   phase: "pre-game";
   wordPack: readonly string[] | null;
+  bannedWords: readonly string[] | null;
 }
 
 export interface InGameState extends BaseState {
@@ -38,6 +56,7 @@ export interface InGameState extends BaseState {
   goal: string;
   guess: string;
   wordPack: readonly string[];
+  bannedWords: readonly string[] | null;
   wordsGuessed: number;
   wordsSkipped: number;
   scrambledGoal: string;
@@ -48,6 +67,7 @@ export interface PostGameState extends BaseState {
   phase: "post-game";
   goal: string;
   wordPack: readonly string[];
+  bannedWords: readonly string[] | null;
   wordsGuessed: number;
   scrambledGoal: string;
   result: ResultStats[];
@@ -56,7 +76,7 @@ export interface PostGameState extends BaseState {
 export type State = PreGameState | InGameState | PostGameState;
 
 export const getInitialState = (): State => {
-  return { phase: "pre-game", wordPack: null };
+  return { phase: "pre-game", wordPack: null, bannedWords: null };
 };
 
 export type LoadDataAction = {
@@ -81,12 +101,18 @@ export type EndGameAction = {
   type: "end-game";
 };
 
+export type LoadBannedWordAction = {
+  type: "load-banned-words";
+  bannedWords: readonly string[] | null;
+};
+
 export type Action =
   | LoadDataAction
   | StartGameAction
   | UpdateGuessAction
   | SkipWordAction
-  | EndGameAction;
+  | EndGameAction
+  | LoadBannedWordAction;
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -104,8 +130,9 @@ export const reducer = (state: State, action: Action): State => {
       return {
         phase: "in-game",
         wordPack: state.wordPack,
+        bannedWords: state.bannedWords,
         guess: "",
-        ...getGoalAndScrambledGoal(state.wordPack),
+        ...getGoalAndScrambledGoal(state.wordPack, state.bannedWords),
         wordsGuessed: 0,
         wordsSkipped: 0,
         result: [],
@@ -128,7 +155,7 @@ export const reducer = (state: State, action: Action): State => {
         return {
           ...state,
           guess: "",
-          ...getGoalAndScrambledGoal(state.wordPack),
+          ...getGoalAndScrambledGoal(state.wordPack, state.bannedWords),
           wordsGuessed: state.wordsGuessed + 1,
           result: updatedResult,
         };
@@ -150,7 +177,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         guess: "",
-        ...getGoalAndScrambledGoal(state.wordPack),
+        ...getGoalAndScrambledGoal(state.wordPack, state.bannedWords),
         wordsSkipped: state.wordsSkipped + 1,
         result: updatedResult,
       };
@@ -165,9 +192,17 @@ export const reducer = (state: State, action: Action): State => {
         phase: "post-game",
         goal: state.goal,
         wordPack: state.wordPack,
+        bannedWords: state.bannedWords,
         wordsGuessed: state.wordsGuessed,
         scrambledGoal: state.scrambledGoal,
         result: state.result,
+      };
+    }
+
+    case "load-banned-words": {
+      return {
+        ...state,
+        bannedWords: action.bannedWords,
       };
     }
   }

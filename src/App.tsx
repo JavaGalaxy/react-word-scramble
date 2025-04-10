@@ -28,6 +28,18 @@ function App() {
       }
     };
 
+    const fetchBannedWords = async () => {
+      try {
+        const response = await fetch("https://unpkg.com/naughty-words@1.2.0/en.json");
+        const bannedWords = await response.json();
+
+        dispatch({ type: "load-banned-words", bannedWords });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchBannedWords();
     fetchData();
   }, []);
 
@@ -114,19 +126,6 @@ function App() {
   return (
     <div className="App">
       {content}
-      <pre>
-        {JSON.stringify(
-          state,
-          (key, value) => {
-            if (key === "wordPack") {
-              return "";
-            } else {
-              return value;
-            }
-          },
-          2,
-        )}
-      </pre>
     </div>
   );
 }
