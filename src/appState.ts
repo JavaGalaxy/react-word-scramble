@@ -1,37 +1,6 @@
+
+import { getGoalAndScrambledGoal } from "./util/getGoalAndScrambledWord";
 import { getNormalizedWord } from "./util/getNormalizedWord";
-import { getRandomElement } from "./util/getRandomElement";
-import { getScrambledWord } from "./util/getScarmbledWord";
-
-export const containsBannedWord = (str: string, bannedWords: readonly string[] | null): boolean => {
-  if (!bannedWords) return false;
-  return bannedWords.some((bannedWord) =>
-    getNormalizedWord(str).includes(getNormalizedWord(bannedWord))
-  );
-};
-
-export const getGoalAndScrambledGoal = (wordPack: readonly string[], bannedWords: readonly string[] | null): {
-  goal: string;
-  scrambledGoal: string;
-}  => {
-
-  const goal = getRandomElement(wordPack);
-  let scrambledGoal = getScrambledWord(goal);
-
-  for(let i=0; i < 10; i++){
-    const goal = getRandomElement(wordPack);
-    let scrambledGoal = getScrambledWord(goal);
-
-    if(scrambledGoal === goal){
-      continue;
-    }
-
-    if(containsBannedWord(scrambledGoal, bannedWords)){
-      continue;
-    }
-  }
-
-  return { goal, scrambledGoal };
-}
 
 export type Phase = "pre-game" | "in-game" | "post-game";
 

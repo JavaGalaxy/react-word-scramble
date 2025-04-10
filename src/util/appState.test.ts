@@ -1,4 +1,4 @@
-import { containsBannedWord } from "../appState";
+import { containsBannedWord } from "./containsBannedWord";
 
 describe('containsBannedWord', () => {
     const bannedWords = ['bad', 'worse', 'worst'];
