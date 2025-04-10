@@ -2,17 +2,17 @@ import { getNormalizedWord } from "./util/getNormalizedWord";
 import { getRandomElement } from "./util/getRandomElement";
 import { getScrambledWord } from "./util/getScarmbledWord";
 
-const containsBannedWord = (str: string, bannedWords: readonly string[] | null): boolean => {
+export const containsBannedWord = (str: string, bannedWords: readonly string[] | null): boolean => {
   if (!bannedWords) return false;
   return bannedWords.some((bannedWord) =>
     getNormalizedWord(str).includes(getNormalizedWord(bannedWord))
   );
 };
 
-function getGoalAndScrambledGoal(wordPack: readonly string[], bannedWords: readonly string[] | null): {
+export const getGoalAndScrambledGoal = (wordPack: readonly string[], bannedWords: readonly string[] | null): {
   goal: string;
   scrambledGoal: string;
-} {
+}  => {
 
   const goal = getRandomElement(wordPack);
   let scrambledGoal = getScrambledWord(goal);
