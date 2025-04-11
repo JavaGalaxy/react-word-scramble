@@ -12,12 +12,6 @@ function App() {
 
   useLoadData(dispatch);
 
-  useEffect(() => {
-    if (state.phase === "in-game") {
-      guessInputRef.current?.focus();
-    }
-  }, [state.phase]);
-
   switch (state.phase) {
     case "pre-game": {
       if (state.wordPack == null) {
@@ -46,6 +40,7 @@ function App() {
                 type="text"
                 style={{ textTransform: "uppercase" }}
                 value={state.guess}
+                autoFocus
                 onChange={(ev) =>
                   dispatch({ type: "update-guess", newGuess: ev.target.value })
                 }
