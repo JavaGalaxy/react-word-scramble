@@ -2,16 +2,12 @@ import { containsBannedWord } from "./containsBannedWord";
 import { getScrambledWord } from "./getScarmbledWord";
 
 export const getGoalAndScrambledGoal = (
-  goal: string | null,
+  goal: string,
   bannedWords: readonly string[] | null,
 ): {
-  goal: string | null;
+  goal: string;
   scrambledGoal: string;
 } => {
-  if (goal === null) {
-    return { goal: null, scrambledGoal: "" };
-  }
-
   const MAX_ATTEMPTS = 10;
   let retries = 0;
 

@@ -1,5 +1,5 @@
+import { getGoalAndScrambledGoal } from "./util/getGoalAndScrambledWord";
 import { getNormalizedWord } from "./util/getNormalizedWord";
-import { getScrambledGoalSafely } from "./util/getScarmbledWord";
 import { shuffleArrayWithConstraints } from "./util/shuffleArray";
 
 export type Phase = "pre-game" | "in-game" | "post-game";
@@ -138,7 +138,10 @@ export const reducer = (state: State, action: Action): State => {
       );
       const currentWordIndex = 0;
       const goal = shuffledWordPack[currentWordIndex];
-      const scrambledGoal = getScrambledGoalSafely(goal, state.bannedWords);
+      const { scrambledGoal } = getGoalAndScrambledGoal(
+        goal,
+        state.bannedWords,
+      );
 
       return {
         phase: "in-game",
@@ -172,7 +175,10 @@ export const reducer = (state: State, action: Action): State => {
 
         const { goal, shuffledWordPack, currentWordIndex, lastUsedWord } =
           getNextWord(state);
-        const scrambledGoal = getScrambledGoalSafely(goal, state.bannedWords);
+        const { scrambledGoal } = getGoalAndScrambledGoal(
+          goal,
+          state.bannedWords,
+        );
 
         return {
           ...state,
@@ -202,7 +208,10 @@ export const reducer = (state: State, action: Action): State => {
 
       const { goal, shuffledWordPack, currentWordIndex, lastUsedWord } =
         getNextWord(state);
-      const scrambledGoal = getScrambledGoalSafely(goal, state.bannedWords);
+      const { scrambledGoal } = getGoalAndScrambledGoal(
+        goal,
+        state.bannedWords,
+      );
 
       return {
         ...state,
