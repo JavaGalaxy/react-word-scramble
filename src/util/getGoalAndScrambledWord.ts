@@ -17,7 +17,10 @@ export const getGoalAndScrambledGoal = (
 
   while (retries < MAX_ATTEMPTS) {
     const scrambledGoal = getScrambledWord(goal);
-    if (scrambledGoal !== goal && !containsBannedWord(scrambledGoal, bannedWords)) {
+    if (
+      scrambledGoal !== goal &&
+      !containsBannedWord(scrambledGoal, bannedWords)
+    ) {
       return { goal, scrambledGoal };
     }
     retries++;
