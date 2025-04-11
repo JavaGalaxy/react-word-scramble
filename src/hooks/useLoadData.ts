@@ -5,7 +5,7 @@ export const useLoadData = (dispatch: Dispatch<Action>): void => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/fruits.txt");
+        const response = await fetch("fruits.txt");
         const text = await response.text();
 
         const wordPack = text
