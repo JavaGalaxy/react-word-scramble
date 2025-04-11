@@ -1,8 +1,5 @@
-
 import { getNormalizedWord } from "./util/getNormalizedWord";
-import {
-  getScrambledGoalSafely,
-} from "./util/getScarmbledWord";
+import { getScrambledGoalSafely } from "./util/getScarmbledWord";
 import { shuffleArrayWithConstraints } from "./util/shuffleArray";
 
 export type Phase = "pre-game" | "in-game" | "post-game";

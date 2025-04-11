@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef } from "react";
 import "./App.css";
 import { getInitialState, reducer } from "./appState";
 import { GameResultsList } from "./components/GameResultsList";
+import { useLoadData } from "./hooks/useLoadData";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
@@ -9,41 +10,7 @@ function App() {
 
   let content = null;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/fruits.txt");
-        const text = await response.text();
-
-        const wordPack = text
-          .split("\n")
-          .map((word) => word.trim())
-          .filter(Boolean);
-
-        setTimeout(() => {
-          dispatch({ type: "load-data", wordPack });
-        }, 3000);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    const fetchBannedWords = async () => {
-      try {
-        const response = await fetch(
-          "https://unpkg.com/naughty-words@1.2.0/en.json",
-        );
-        const bannedWords = await response.json();
-
-        dispatch({ type: "load-banned-words", bannedWords });
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchBannedWords();
-    fetchData();
-  }, []);
+  useLoadData(dispatch);
 
   useEffect(() => {
     if (state.phase === "in-game") {
