@@ -1,5 +1,5 @@
 import { ResultStats } from "../appState";
-import  "./styles.css"
+import "./styles.css";
 
 export const GameResultsList = ({ results }: { results: ResultStats[] }) => {
   if (results.length === 0) return null;

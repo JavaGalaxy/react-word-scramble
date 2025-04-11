@@ -1,8 +1,8 @@
 .results-list {
-    align-items: center;
+  align-items: center;
 }
 
 .list-style {
-    list-style-position: inside;
-    padding-left: 0;
+  list-style-position: inside;
+  padding-left: 0;
 }
