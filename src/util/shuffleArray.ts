@@ -7,3 +7,21 @@ export const shuffleArray = <T>(array: readonly T[]): T[] => {
 
   return shuffledArray;
 };
+
+export const shuffleArrayWithConstraints = <T>(
+  array: readonly T[],
+  lastElement?: T,
+): T[] => {
+  let shuffledArray = shuffleArray(array);
+
+  if (lastElement === shuffledArray[0]) {
+    const swapIndex =
+      1 + Math.floor(Math.random() * (shuffledArray.length - 1));
+    [shuffledArray[0], shuffledArray[swapIndex]] = [
+      shuffledArray[swapIndex],
+      shuffledArray[0],
+    ];
+  }
+
+  return shuffledArray;
+};
