@@ -14,9 +14,7 @@ export const useLoadData = (dispatch: Dispatch<Action>): void => {
           .map(getNormalizedWord)
           .filter(Boolean);
 
-        setTimeout(() => {
-          dispatch({ type: "load-data", wordPack });
-        }, 3000);
+        dispatch({ type: "load-data", wordPack });
       } catch (err) {
         console.error(err);
       }
@@ -37,6 +35,5 @@ export const useLoadData = (dispatch: Dispatch<Action>): void => {
 
     fetchBannedWords();
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 };
