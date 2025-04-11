@@ -1,4 +1,3 @@
-
 import { getGoalAndScrambledGoal } from "./util/getGoalAndScrambledWord";
 import { getNormalizedWord } from "./util/getNormalizedWord";
 
