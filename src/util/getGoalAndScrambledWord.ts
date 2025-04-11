@@ -12,17 +12,15 @@ export const getGoalAndScrambledGoal = (
   const goal = getRandomElement(wordPack);
   let scrambledGoal = getScrambledWord(goal);
 
-  for (let i = 0; i < 10; i++) {
-    const goal = getRandomElement(wordPack);
-    let scrambledGoal = getScrambledWord(goal);
+  const MAX_ATTEMPTS = 10;
+  let retries = 0;
 
-    if (scrambledGoal === goal) {
-      continue;
-    }
-
-    if (containsBannedWord(scrambledGoal, bannedWords)) {
-      continue;
-    }
+  while (
+    scrambledGoal === goal ||
+    (containsBannedWord(scrambledGoal, bannedWords) && retries < MAX_ATTEMPTS)
+  ) {
+    scrambledGoal = getScrambledWord(goal);
+    retries++;
   }
 
   return { goal, scrambledGoal };
