@@ -12,19 +12,16 @@ export const getGoalAndScrambledGoal = (
     return { goal: null, scrambledGoal: "" };
   }
 
-  let scrambledGoal = getScrambledWord(goal);
-
   const MAX_ATTEMPTS = 10;
   let retries = 0;
 
-  while (
-    (scrambledGoal === goal ||
-      containsBannedWord(scrambledGoal, bannedWords)) &&
-    retries < MAX_ATTEMPTS
-  ) {
-    scrambledGoal = getScrambledWord(goal);
+  while (retries < MAX_ATTEMPTS) {
+    const scrambledGoal = getScrambledWord(goal);
+    if (scrambledGoal !== goal && !containsBannedWord(scrambledGoal, bannedWords)) {
+      return { goal, scrambledGoal };
+    }
     retries++;
   }
 
-  return { goal, scrambledGoal };
+  throw new Error("Exhausted attempt to get valid scrambled word");
 };
