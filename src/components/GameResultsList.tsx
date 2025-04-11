@@ -1,4 +1,5 @@
 import { ResultStats } from "../appState";
+import "./styles.css";
 
 export const GameResultsList = ({ results }: { results: ResultStats[] }) => {
   if (results.length === 0) return null;
@@ -6,12 +7,14 @@ export const GameResultsList = ({ results }: { results: ResultStats[] }) => {
   return (
     <div className="game-history">
       <h3>Game Results</h3>
-      {results.map((resultItem, index) => (
-        <li key={index}>
-          {resultItem.word} -{" "}
-          {resultItem.guessed ? "Guessed correctly" : "Skipped"}
-        </li>
-      ))}
+      <ul className="list-style">
+        {results.map((resultItem, index) => (
+          <li key={index} className="results-list">
+            {resultItem.word} -{" "}
+            {resultItem.guessed ? "Guessed correctly" : "Skipped"}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
