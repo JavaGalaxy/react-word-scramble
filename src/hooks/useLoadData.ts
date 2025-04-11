@@ -1,5 +1,5 @@
-import { Dispatch, useEffect } from "react";
-import { Action } from "../appState";
+import { type Dispatch, useEffect } from "react";
+import type { Action } from "../appState";
 
 export const useLoadData = (dispatch: Dispatch<Action>): void => {
   useEffect(() => {
