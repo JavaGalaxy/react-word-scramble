@@ -10,18 +10,29 @@ export const shuffleArray = <T>(array: readonly T[]): T[] => {
 
 export const shuffleArrayWithConstraints = <T>(
   array: readonly T[],
-  lastElement?: T,
+  lastUsedItem: T | null,
 ): T[] => {
-  let shuffledArray = shuffleArray(array);
+  if (array.length <= 1) {
+    return [...array];
+  }
+  const shuffled = [...array];
 
-  if (lastElement === shuffledArray[0]) {
-    const swapIndex =
-      1 + Math.floor(Math.random() * (shuffledArray.length - 1));
-    [shuffledArray[0], shuffledArray[swapIndex]] = [
-      shuffledArray[swapIndex],
-      shuffledArray[0],
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  if (
+    lastUsedItem !== null &&
+    shuffled[0] === lastUsedItem &&
+    shuffled.length > 1
+  ) {
+    const swapPosition = Math.floor(Math.random() * (shuffled.length - 1)) + 1;
+    [shuffled[0], shuffled[swapPosition]] = [
+      shuffled[swapPosition],
+      shuffled[0],
     ];
   }
 
-  return shuffledArray;
+  return shuffled;
 };

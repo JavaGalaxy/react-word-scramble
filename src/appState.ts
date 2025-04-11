@@ -1,5 +1,9 @@
-import { getGoalAndScrambledGoal } from "./util/getGoalAndScrambledWord";
+
 import { getNormalizedWord } from "./util/getNormalizedWord";
+import {
+  getScrambledGoalSafely,
+} from "./util/getScarmbledWord";
+import { shuffleArrayWithConstraints } from "./util/shuffleArray";
 
 export type Phase = "pre-game" | "in-game" | "post-game";
 
@@ -29,6 +33,9 @@ export interface InGameState extends BaseState {
   wordsSkipped: number;
   scrambledGoal: string;
   result: ResultStats[];
+  shuffledWordPack: string[];
+  currentWordIndex: number;
+  lastUsedWord: string | null;
 }
 
 export interface PostGameState extends BaseState {
@@ -39,6 +46,9 @@ export interface PostGameState extends BaseState {
   wordsGuessed: number;
   scrambledGoal: string;
   result: ResultStats[];
+  shuffledWordPack: string[];
+  currentWordIndex: number;
+  lastUsedWord: string | null;
 }
 
 export type State = PreGameState | InGameState | PostGameState;
@@ -82,6 +92,31 @@ export type Action =
   | EndGameAction
   | LoadBannedWordAction;
 
+const getNextWord = (
+  state: InGameState | PostGameState,
+): {
+  goal: string;
+  shuffledWordPack: string[];
+  currentWordIndex: number;
+  lastUsedWord: string | null;
+} => {
+  let { shuffledWordPack, currentWordIndex, lastUsedWord } = state;
+
+  if (currentWordIndex >= shuffledWordPack.length) {
+    lastUsedWord = shuffledWordPack[shuffledWordPack.length - 1];
+    shuffledWordPack = shuffleArrayWithConstraints(
+      state.wordPack,
+      lastUsedWord,
+    );
+    currentWordIndex = 0;
+  }
+
+  const goal = shuffledWordPack[currentWordIndex];
+  currentWordIndex++;
+
+  return { goal, shuffledWordPack, currentWordIndex, lastUsedWord };
+};
+
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "load-data": {
@@ -95,15 +130,32 @@ export const reducer = (state: State, action: Action): State => {
         return state;
       }
 
+      let lastUsedWord = null;
+      if (state.phase === "post-game") {
+        lastUsedWord = state.lastUsedWord;
+      }
+
+      const shuffledWordPack = shuffleArrayWithConstraints(
+        state.wordPack,
+        lastUsedWord,
+      );
+      const currentWordIndex = 0;
+      const goal = shuffledWordPack[currentWordIndex];
+      const scrambledGoal = getScrambledGoalSafely(goal, state.bannedWords);
+
       return {
         phase: "in-game",
         wordPack: state.wordPack,
         bannedWords: state.bannedWords,
         guess: "",
-        ...getGoalAndScrambledGoal(state.wordPack, state.bannedWords),
+        goal,
+        scrambledGoal,
         wordsGuessed: 0,
         wordsSkipped: 0,
         result: [],
+        shuffledWordPack,
+        currentWordIndex: currentWordIndex + 1,
+        lastUsedWord,
       };
     }
 
@@ -120,12 +172,21 @@ export const reducer = (state: State, action: Action): State => {
           ...state.result,
           { word: state.goal, guessed: true, skipped: false },
         ];
+
+        const { goal, shuffledWordPack, currentWordIndex, lastUsedWord } =
+          getNextWord(state);
+        const scrambledGoal = getScrambledGoalSafely(goal, state.bannedWords);
+
         return {
           ...state,
           guess: "",
-          ...getGoalAndScrambledGoal(state.wordPack, state.bannedWords),
+          goal,
+          scrambledGoal,
           wordsGuessed: state.wordsGuessed + 1,
           result: updatedResult,
+          shuffledWordPack,
+          currentWordIndex,
+          lastUsedWord,
         };
       }
 
@@ -142,12 +203,20 @@ export const reducer = (state: State, action: Action): State => {
         { word: state.goal, guessed: false, skipped: true },
       ];
 
+      const { goal, shuffledWordPack, currentWordIndex, lastUsedWord } =
+        getNextWord(state);
+      const scrambledGoal = getScrambledGoalSafely(goal, state.bannedWords);
+
       return {
         ...state,
         guess: "",
-        ...getGoalAndScrambledGoal(state.wordPack, state.bannedWords),
+        goal,
+        scrambledGoal,
         wordsSkipped: state.wordsSkipped + 1,
         result: updatedResult,
+        shuffledWordPack,
+        currentWordIndex,
+        lastUsedWord,
       };
     }
 
@@ -164,6 +233,9 @@ export const reducer = (state: State, action: Action): State => {
         wordsGuessed: state.wordsGuessed,
         scrambledGoal: state.scrambledGoal,
         result: state.result,
+        shuffledWordPack: state.shuffledWordPack,
+        currentWordIndex: state.currentWordIndex,
+        lastUsedWord: state.lastUsedWord,
       };
     }
 
