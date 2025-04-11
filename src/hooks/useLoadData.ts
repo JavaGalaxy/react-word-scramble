@@ -1,5 +1,6 @@
 import { type Dispatch, useEffect } from "react";
 import type { Action } from "../appState";
+import { getNormalizedWord } from "../util/getNormalizedWord";
 
 export const useLoadData = (dispatch: Dispatch<Action>): void => {
   useEffect(() => {
@@ -10,7 +11,7 @@ export const useLoadData = (dispatch: Dispatch<Action>): void => {
 
         const wordPack = text
           .split("\n")
-          .map((word) => word.trim())
+          .map(getNormalizedWord)
           .filter(Boolean);
 
         setTimeout(() => {
