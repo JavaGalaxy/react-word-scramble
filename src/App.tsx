@@ -1,7 +1,8 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import { useReducer, useRef } from "react";
 import "./App.css";
 import { getInitialState, reducer } from "./appState";
 import { GameResultsList } from "./components/GameResultsList";
+import { useLoadData } from "./hooks/useLoadData";
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, getInitialState);
@@ -9,33 +10,7 @@ function App() {
 
   let content = null;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/fruits.txt");
-        const text = await response.text();
-
-        const wordPack = text
-          .split("\n")
-          .map((word) => word.trim())
-          .filter(Boolean);
-
-        setTimeout(() => {
-          dispatch({ type: "load-data", wordPack });
-        }, 3000);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (state.phase === "in-game") {
-      guessInputRef.current?.focus();
-    }
-  }, [state.phase]);
+  useLoadData(dispatch);
 
   switch (state.phase) {
     case "pre-game": {
@@ -65,6 +40,7 @@ function App() {
                 type="text"
                 style={{ textTransform: "uppercase" }}
                 value={state.guess}
+                autoFocus
                 onChange={(ev) =>
                   dispatch({ type: "update-guess", newGuess: ev.target.value })
                 }
@@ -111,24 +87,7 @@ function App() {
     }
   }
 
-  return (
-    <div className="App">
-      {content}
-      <pre>
-        {JSON.stringify(
-          state,
-          (key, value) => {
-            if (key === "wordPack") {
-              return "";
-            } else {
-              return value;
-            }
-          },
-          2,
-        )}
-      </pre>
-    </div>
-  );
+  return <div className="App">{content}</div>;
 }
 
 export default App;
