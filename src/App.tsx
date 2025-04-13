@@ -1,11 +1,11 @@
-import { useReducer, useRef } from "react";
+import { useRef } from "react";
 import "./App.css";
-import { getInitialState, reducer } from "./appState";
+import useAppState from "./useAppState";
 import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, null, getInitialState);
+  const [state, dispatch] = useAppState();
   const guessInputRef = useRef<HTMLInputElement>(null);
 
   let content = null;

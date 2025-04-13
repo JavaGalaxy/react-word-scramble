@@ -1,4 +1,4 @@
-import { ResultStats } from "../appState";
+import { ResultStats } from "../useAppState";
 import "./styles.css";
 
 export const GameResultsList = ({ results }: { results: ResultStats[] }) => {
