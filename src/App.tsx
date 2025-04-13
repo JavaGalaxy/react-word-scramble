@@ -3,6 +3,7 @@ import "./App.css";
 import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
+import { getHighlightedIndices } from "./util/getMatchingLetters";
 
 function App() {
   const [state, dispatch] = useAppState();
@@ -27,11 +28,32 @@ function App() {
     }
 
     case "in-game": {
+      const highlightedIndices = getHighlightedIndices(
+        state.scrambledGoal,
+        state.guess,
+      );
+
+      const scrambledWordDisplay = (
+        <div className="scrambled-word">
+          {state.scrambledGoal.split("").map((letter, index) => {
+            const isHighlighted = highlightedIndices.has(index);
+            return (
+              <span
+                key={index}
+                className={isHighlighted ? "letter-highlighted" : "letter"}
+              >
+                {letter}
+              </span>
+            );
+          })}
+        </div>
+      );
+
       content = (
         <>
           <div>Words Guessed: {state.wordsGuessed}</div>
           <div>Words Skipped: {state.wordsSkipped}</div>
-          <div>Goal: {state.scrambledGoal}</div>
+          <div>Goal: {scrambledWordDisplay}</div>
           <div>
             <label>
               Guess:
