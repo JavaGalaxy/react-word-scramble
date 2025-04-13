@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import "./App.css";
-import useAppState from "./useAppState";
+import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
 

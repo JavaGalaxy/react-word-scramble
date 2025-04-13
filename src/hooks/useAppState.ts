@@ -1,7 +1,7 @@
 import { Dispatch, useReducer } from "react";
-import { getGoalAndScrambledGoal } from "./util/getGoalAndScrambledWord";
-import { getNormalizedWord } from "./util/getNormalizedWord";
-import { shuffleArrayWithConstraints } from "./util/shuffleArray";
+import { getGoalAndScrambledGoal } from "../util/getGoalAndScrambledWord";
+import { getNormalizedWord } from "../util/getNormalizedWord";
+import { shuffleArrayWithConstraints } from "../util/shuffleArray";
 
 export type Phase = "pre-game" | "in-game" | "post-game";
 
