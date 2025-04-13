@@ -1,14 +1,17 @@
-.results-list {
-  align-items: center;
-}
-
-.list-style {
-  list-style-position: inside;
-  padding-left: 0;
-}
-
 .game-history {
   display: inline-block;
   padding: 2px 5px;
   font-weight: lighter;
+}
+
+.results-list {
+  text-align: left;
+  margin-bottom: 5px; 
+  padding-left: 5px;
+}
+
+.list-style {
+  padding-left: 20px;
+  margin-left: 0;
+  text-align: left;
 }
