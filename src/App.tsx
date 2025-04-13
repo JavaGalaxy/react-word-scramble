@@ -112,21 +112,31 @@ function App() {
 
     case "post-game": {
       content = (
-        <div className="goal-container">
-          <div>
-            Game Over! You guessed {state.wordsGuessed}{" "}
-            {state.wordsGuessed === 1 ? "word" : "words"} correctly!
+        <div className="game-over-container">
+          <h2 className="game-over-title">Game Over!</h2>
+
+          <div className="game-over-stats">
+            <div className="score-display">
+              You guessed{" "}
+              <span className="highlight">{state.wordsGuessed}</span>{" "}
+              {state.wordsGuessed === 1 ? "word" : "words"} correctly!
+            </div>
+
+            <div className="last-word-display">
+              Your last word was:{" "}
+              <span className="highlight">{state.goal}</span>
+            </div>
           </div>
-          <div>Your last word was: {state.goal}</div>
 
           <GameResultsList results={state.result} />
-          <div>
+
+          <div className="new-game-container">
             <button
-              className="btn-begin"
+              className="btn-new-game"
               autoFocus
               onClick={() => dispatch({ type: "start-game" })}
             >
-              Begin new game
+              Begin New Game
             </button>
           </div>
         </div>
