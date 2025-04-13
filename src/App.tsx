@@ -54,23 +54,37 @@ function App() {
 
       content = (
         <>
-          <div>Words Guessed: {state.wordsGuessed}</div>
-          <div>Words Skipped: {state.wordsSkipped}</div>
-          <div>Goal: {scrambledWordDisplay}</div>
-          <div>
-            <label>
+          <div className="game-stats">
+            <div className="stats-container">
+              <div className="stat-item">
+                <span className="stat-label">Words Guessed:</span>
+                <span className="stat-value">{state.wordsGuessed}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Words Skipped:</span>
+                <span className="stat-value">{state.wordsSkipped}</span>
+              </div>
+            </div>
+            <div className="goal-container">
+              <span className="goal-label">Goal:</span>
+              <span className="goal-value">{scrambledWordDisplay}</span>
+            </div>
+          </div>
+          <div className="guess-input-container">
+            <label htmlFor="guess-input" className="guess-label">
               Guess:
-              <input
-                ref={guessInputRef}
-                type="text"
-                style={{ textTransform: "uppercase" }}
-                value={state.guess}
-                autoFocus
-                onChange={(ev) =>
-                  dispatch({ type: "update-guess", newGuess: ev.target.value })
-                }
-              />
             </label>
+            <input
+              id="guess-input"
+              ref={guessInputRef}
+              type="text"
+              className="guess-input"
+              value={state.guess}
+              autoFocus
+              onChange={(ev) =>
+                dispatch({ type: "update-guess", newGuess: ev.target.value })
+              }
+            />
           </div>
           <div className="button-group">
             <button
@@ -98,7 +112,7 @@ function App() {
 
     case "post-game": {
       content = (
-        <>
+        <div className="goal-container">
           <div>
             Game Over! You guessed {state.wordsGuessed}{" "}
             {state.wordsGuessed === 1 ? "word" : "words"} correctly!
@@ -106,15 +120,16 @@ function App() {
           <div>Your last word was: {state.goal}</div>
 
           <GameResultsList results={state.result} />
-
-          <button
-            className="btn-begin"
-            autoFocus
-            onClick={() => dispatch({ type: "start-game" })}
-          >
-            Begin new game
-          </button>
-        </>
+          <div>
+            <button
+              className="btn-begin"
+              autoFocus
+              onClick={() => dispatch({ type: "start-game" })}
+            >
+              Begin new game
+            </button>
+          </div>
+        </div>
       );
       break;
     }
