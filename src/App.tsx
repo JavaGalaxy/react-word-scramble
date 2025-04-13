@@ -20,7 +20,10 @@ function App() {
         break;
       }
       content = (
-        <button onClick={() => dispatch({ type: "start-game" })}>
+        <button
+          className="btn-begin"
+          onClick={() => dispatch({ type: "start-game" })}
+        >
           Begin new game
         </button>
       );
@@ -71,6 +74,7 @@ function App() {
           </div>
           <div className="button-group">
             <button
+              className="btn-skip"
               onClick={() => {
                 dispatch({ type: "skip-word" });
                 guessInputRef.current?.focus();
@@ -78,7 +82,10 @@ function App() {
             >
               Skip Word
             </button>
-            <button onClick={() => dispatch({ type: "end-game" })}>
+            <button
+              className="btn-end"
+              onClick={() => dispatch({ type: "end-game" })}
+            >
               End Game
             </button>
           </div>
@@ -100,7 +107,11 @@ function App() {
 
           <GameResultsList results={state.result} />
 
-          <button autoFocus onClick={() => dispatch({ type: "start-game" })}>
+          <button
+            className="btn-begin"
+            autoFocus
+            onClick={() => dispatch({ type: "start-game" })}
+          >
             Begin new game
           </button>
         </>

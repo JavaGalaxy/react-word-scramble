@@ -6,3 +6,9 @@
   list-style-position: inside;
   padding-left: 0;
 }
+
+.game-history {
+  display: inline-block;
+  padding: 2px 5px;
+  font-weight: lighter;
+}
