@@ -1,4 +1,4 @@
-import { containsBannedWord } from "./containsBannedWord";
+import { containsBannedWord } from "../containsBannedWord";
 
 describe("containsBannedWord", () => {
   const bannedWords = ["bad", "worse", "worst"];

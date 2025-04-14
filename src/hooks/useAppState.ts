@@ -1,6 +1,7 @@
-import { getGoalAndScrambledGoal } from "./util/getGoalAndScrambledWord";
-import { getNormalizedWord } from "./util/getNormalizedWord";
-import { shuffleArrayWithConstraints } from "./util/shuffleArray";
+import { Dispatch, useReducer } from "react";
+import { getGoalAndScrambledGoal } from "../util/getGoalAndScrambledWord";
+import { getNormalizedWord } from "../util/getNormalizedWord";
+import { shuffleArrayWithConstraints } from "../util/shuffleArray";
 
 export type Phase = "pre-game" | "in-game" | "post-game";
 
@@ -255,3 +256,7 @@ export const reducer = (state: State, action: Action): State => {
 
   return state;
 };
+
+export default function useAppState(): [State, Dispatch<Action>] {
+  return useReducer(reducer, null, getInitialState);
+}
