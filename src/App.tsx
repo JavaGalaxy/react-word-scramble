@@ -73,18 +73,18 @@ function App() {
           <div className="guess-input-container">
             <label htmlFor="guess-input" className="guess-label">
               Guess:
+              <input
+                id="guess-input"
+                ref={guessInputRef}
+                type="text"
+                className="guess-input"
+                value={state.guess}
+                autoFocus
+                onChange={(ev) =>
+                  dispatch({ type: "update-guess", newGuess: ev.target.value })
+                }
+              />
             </label>
-            <input
-              id="guess-input"
-              ref={guessInputRef}
-              type="text"
-              className="guess-input"
-              value={state.guess}
-              autoFocus
-              onChange={(ev) =>
-                dispatch({ type: "update-guess", newGuess: ev.target.value })
-              }
-            />
           </div>
           <div className="button-group">
             <button
