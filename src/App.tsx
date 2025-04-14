@@ -4,6 +4,7 @@ import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
 import { getHighlightedIndices } from "./util/getMatchingLetters";
+import { getHighlightedLetters } from "./util/getHighlightedLetters";
 
 function App() {
   const [state, dispatch] = useAppState();
@@ -85,6 +86,20 @@ function App() {
                 }
               />
             </label>
+          </div>
+          <div>
+            <div>
+              {getHighlightedLetters(state.scrambledGoal, state.guess).map(
+                (item, index) => (
+                  <>
+                    <span key={index}>
+                      {item.letter} {" -> "} {item.color} {"\n"}
+                    </span>
+                    <br />
+                  </>
+                ),
+              )}
+            </div>
           </div>
           <div className="button-group">
             <button
