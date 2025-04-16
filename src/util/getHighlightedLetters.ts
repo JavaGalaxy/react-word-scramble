@@ -4,20 +4,17 @@ export const getHighlightedLetters = (
 ): { letter: string; color: string }[] => {
   const map = new Map<string, number>();
 
-  const responseObject: { letter: string; color: string }[] = [];
-
-  for (const letter of scrambledWord) {
+  for (const letter of scrambledWord.toUpperCase()) {
     map.set(letter, (map.get(letter) ?? 0) + 1);
   }
 
-  for (const letter of guess) {
-    if (map.has(letter) && map.get(letter)! > 0) {
-      responseObject.push({ letter: letter, color: "green" });
-      map.set(letter, map.get(letter)! - 1);
+  return [...guess].map((letter) => {
+    const upperLetter = letter.toUpperCase();
+    if (map.has(upperLetter) && map.get(upperLetter)! > 0) {
+      map.set(upperLetter, map.get(upperLetter)! - 1);
+      return { letter, color: "royalblue" };
     } else {
-      responseObject.push({ letter: letter, color: "red" });
+      return { letter, color: "crimson" };
     }
-  }
-
-  return responseObject;
+  });
 };

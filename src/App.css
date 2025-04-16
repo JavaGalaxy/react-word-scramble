@@ -341,3 +341,39 @@
     transform: translateY(0);
   }
 }
+
+.guess-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.guess-underlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.guess-input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 8px;
+  text-align: center;
+}
+
+.word {
+  font-family: monospace;
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
