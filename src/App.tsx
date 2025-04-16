@@ -53,6 +53,8 @@ function App() {
         </div>
       );
 
+      const highlightedLetters = getHighlightedLetters(state.scrambledGoal, state.guess);
+
       content = (
         <>
           <div className="game-stats">
@@ -89,17 +91,16 @@ function App() {
           </div>
           <div>
             <div>
-              {getHighlightedLetters(state.scrambledGoal, state.guess).map(
-                (item, index) => (
-                  <>
-                    <span key={index}>
-                      {item.letter} {" -> "} {item.color} {"\n"}
-                    </span>
-                    <br />
-                  </>
-                ),
-              )}
-            </div>
+            {highlightedLetters.map((item, index) => (
+              <span 
+                key={index} 
+                className={`letter-${item.color}`}
+                style={{ color: item.color }}
+              >
+                {item.letter}
+              </span>
+            ))}
+          </div>
           </div>
           <div className="button-group">
             <button
