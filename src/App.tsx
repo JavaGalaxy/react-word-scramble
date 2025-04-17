@@ -4,6 +4,7 @@ import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
 import { getHighlightedIndices } from "./util/getMatchingLetters";
+import { getHighlightedLetters } from "./util/getHighlightedLetters";
 
 function App() {
   const [state, dispatch] = useAppState();
@@ -52,6 +53,11 @@ function App() {
         </div>
       );
 
+      const highlightedLetters = getHighlightedLetters(
+        state.scrambledGoal,
+        state.guess.toUpperCase() || " ",
+      );
+
       content = (
         <>
           <div className="game-stats">
@@ -73,17 +79,34 @@ function App() {
           <div className="guess-input-container">
             <label htmlFor="guess-input" className="guess-label">
               Guess:
-              <input
-                id="guess-input"
-                ref={guessInputRef}
-                type="text"
-                className="guess-input"
-                value={state.guess}
-                autoFocus
-                onChange={(ev) =>
-                  dispatch({ type: "update-guess", newGuess: ev.target.value })
-                }
-              />
+              <div className="guess-container">
+                <div className="guess-underlay word">
+                  {highlightedLetters.map((item, index) => (
+                    <span key={index} style={{ color: item.color }}>
+                      {item.letter}
+                    </span>
+                  ))}
+                </div>
+                <input
+                  id="guess-input"
+                  ref={guessInputRef}
+                  type="text"
+                  className="guess-input word"
+                  value={state.guess}
+                  autoFocus
+                  onChange={(ev) =>
+                    dispatch({
+                      type: "update-guess",
+                      newGuess: ev.target.value,
+                    })
+                  }
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "transparent",
+                    caretColor: "black",
+                  }}
+                />
+              </div>
             </label>
           </div>
           <div className="button-group">
