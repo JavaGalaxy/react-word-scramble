@@ -12,21 +12,38 @@ function App() {
 
   let content = null;
 
-  useLoadData(dispatch);
+  // useLoadData(dispatch);
+
+  const availableWordLists = [
+    {id: "fruits", fileName: "fruits.txt"},
+    {id: "states", fileName: "us_states.txt"},
+    {id: "countries", fileName: "countries.txt"}
+  ]
 
   switch (state.phase) {
     case "pre-game": {
-      if (state.wordPack == null) {
-        content = <>Loading data...</>;
-        break;
-      }
       content = (
-        <button
-          className="btn-begin"
-          onClick={() => dispatch({ type: "start-game" })}
-        >
-          Begin new game
-        </button>
+        <>
+          <div className="game-setup">
+            <h2>Word Scramble Game</h2>
+            <div className="word-list-selector">
+              <h3>Select what you want to unscramble:</h3>
+              <div className="word-list-options">
+                {availableWordLists.map((list) => {
+                  return (<button id="list">
+                    {list.id}
+                  </button>
+                )})}
+              </div>
+            </div>
+          </div>
+          <button
+            className="btn-begin"
+            onClick={() => dispatch({ type: "start-game" })}
+          >
+            Begin new game
+          </button>
+        </>
       );
       break;
     }
