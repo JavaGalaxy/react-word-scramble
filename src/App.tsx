@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import "./App.css";
 import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
@@ -9,11 +9,12 @@ import { getHighlightedLetters } from "./util/getHighlightedLetters";
 function App() {
   const [state, dispatch] = useAppState();
   const guessInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string>('');;
 
   let content = null;
 
-  // useLoadData(dispatch);
-
+  useLoadData(dispatch, selectedFileName);
+ 
   const availableWordLists = [
     {id: "fruits", fileName: "fruits.txt"},
     {id: "states", fileName: "us_states.txt"},
@@ -30,7 +31,11 @@ function App() {
               <h3>Select what you want to unscramble:</h3>
               <div className="word-list-options">
                 {availableWordLists.map((list) => {
-                  return (<button id="list">
+                  return (<button 
+                    key={list.id}
+                    className="btn-select"
+                    onClick={() => setSelectedFileName(list.fileName)}
+                  >
                     {list.id}
                   </button>
                 )})}
@@ -40,6 +45,7 @@ function App() {
           <button
             className="btn-begin"
             onClick={() => dispatch({ type: "start-game" })}
+            disabled={!selectedFileName || state.wordPack === null}
           >
             Begin new game
           </button>

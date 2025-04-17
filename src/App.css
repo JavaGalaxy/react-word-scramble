@@ -17,6 +17,21 @@
   font-size: 2rem;
   flex-wrap: wrap;
 }
+.btn-select {
+  background-color: #e74c3c;
+  color: white;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 20px;
+}
 
 .btn-begin {
   background-color: #4caf50;
@@ -376,4 +391,9 @@
   font-size: 1.5rem;
   letter-spacing: 0.1em;
   text-align: center;
+}
+
+.btn-begin:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
