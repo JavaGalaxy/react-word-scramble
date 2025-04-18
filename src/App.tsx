@@ -5,6 +5,7 @@ import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
 import { getHighlightedIndices } from "./util/getMatchingLetters";
 import { getHighlightedLetters } from "./util/getHighlightedLetters";
+import { useBannedWordData } from "./hooks/useBannedWordData";
 
 function App() {
   const [state, dispatch] = useAppState();
@@ -13,6 +14,7 @@ function App() {
 
   let content = null;
 
+  useBannedWordData(dispatch);
   useLoadData(dispatch, selectedFileName);
 
   const availableWordLists = [
