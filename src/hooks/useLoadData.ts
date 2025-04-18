@@ -2,8 +2,10 @@ import { type Dispatch, useEffect, useMemo } from "react";
 import type { Action } from "./useAppState";
 import { getNormalizedWord } from "../util/getNormalizedWord";
 
-export const useLoadData = (dispatch: Dispatch<Action>, fileName: string): void => {
-
+export const useLoadData = (
+  dispatch: Dispatch<Action>,
+  fileName: string,
+): void => {
   useMemo(() => {
     const fetchBannedWords = async () => {
       try {
@@ -18,7 +20,7 @@ export const useLoadData = (dispatch: Dispatch<Action>, fileName: string): void 
       }
     };
     fetchBannedWords();
-  }, [dispatch])
+  }, [dispatch]);
 
   useEffect(() => {
     if (!fileName) return;
@@ -38,7 +40,7 @@ export const useLoadData = (dispatch: Dispatch<Action>, fileName: string): void 
         console.error(err);
       }
     };
-    
+
     if (fileName) {
       fetchData();
     }
