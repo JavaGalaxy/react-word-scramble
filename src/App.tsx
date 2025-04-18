@@ -9,17 +9,17 @@ import { getHighlightedLetters } from "./util/getHighlightedLetters";
 function App() {
   const [state, dispatch] = useAppState();
   const guessInputRef = useRef<HTMLInputElement>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string>('');;
+  const [selectedFileName, setSelectedFileName] = useState<string>("");
 
   let content = null;
 
   useLoadData(dispatch, selectedFileName);
- 
+
   const availableWordLists = [
-    {id: "fruits", fileName: "fruits.txt"},
-    {id: "states", fileName: "us_states.txt"},
-    {id: "countries", fileName: "countries.txt"}
-  ]
+    { id: "fruits", fileName: "fruits.txt" },
+    { id: "states", fileName: "us_states.txt" },
+    { id: "countries", fileName: "countries.txt" },
+  ];
 
   switch (state.phase) {
     case "pre-game": {
@@ -31,14 +31,16 @@ function App() {
               <h3>Select what you want to unscramble:</h3>
               <div className="word-list-options">
                 {availableWordLists.map((list) => {
-                  return (<button 
-                    key={list.id}
-                    className="btn-select"
-                    onClick={() => setSelectedFileName(list.fileName)}
-                  >
-                    {list.id}
-                  </button>
-                )})}
+                  return (
+                    <button
+                      key={list.id}
+                      className={`word-list-option ${selectedFileName === list.fileName ? "selected" : ""}`}
+                      onClick={() => setSelectedFileName(list.fileName)}
+                    >
+                      {list.id}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
