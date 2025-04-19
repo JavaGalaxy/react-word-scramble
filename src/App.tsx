@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && state.phase === "in-game") {
+      if (event.key === "Escape") {
         dispatch({ type: "skip-word" });
         guessInputRef.current?.focus();
       }
