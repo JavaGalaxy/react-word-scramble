@@ -377,3 +377,32 @@
   letter-spacing: 0.1em;
   text-align: center;
 }
+
+.btn-begin:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.word-list-option {
+  padding: 10px 15px;
+  margin: 5px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.word-list-option:hover {
+  background-color: #e8e8e8;
+}
+
+.word-list-option.selected {
+  border-color: #4a90e2;
+  background-color: #e6f0ff;
+  color: #0066cc;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}

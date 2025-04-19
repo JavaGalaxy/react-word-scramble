@@ -1,32 +1,74 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
 import { useLoadData } from "./hooks/useLoadData";
 import { getHighlightedIndices } from "./util/getMatchingLetters";
 import { getHighlightedLetters } from "./util/getHighlightedLetters";
+import { useBannedWordData } from "./hooks/useBannedWordData";
 
 function App() {
   const [state, dispatch] = useAppState();
   const guessInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string>("");
 
   let content = null;
 
-  useLoadData(dispatch);
+  useBannedWordData(dispatch);
+  useLoadData(dispatch, selectedFileName);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        dispatch({ type: "skip-word" });
+        guessInputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      return document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [state.phase, dispatch]);
+
+  const availableWordLists = [
+    { id: "fruits", fileName: "fruits.txt" },
+    { id: "states", fileName: "us_states.txt" },
+    { id: "countries", fileName: "countries.txt" },
+  ];
 
   switch (state.phase) {
     case "pre-game": {
-      if (state.wordPack == null) {
-        content = <>Loading data...</>;
-        break;
-      }
       content = (
-        <button
-          className="btn-begin"
-          onClick={() => dispatch({ type: "start-game" })}
-        >
-          Begin new game
-        </button>
+        <>
+          <div className="game-setup">
+            <h2>Word Scramble Game</h2>
+            <div className="word-list-selector">
+              <h3>Select what you want to unscramble:</h3>
+              <div className="word-list-options">
+                {availableWordLists.map((list) => {
+                  return (
+                    <button
+                      key={list.id}
+                      className={`word-list-option ${selectedFileName === list.fileName ? "selected" : ""}`}
+                      onClick={() => setSelectedFileName(list.fileName)}
+                    >
+                      {list.id}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          <button
+            className="btn-begin"
+            onClick={() => dispatch({ type: "start-game" })}
+            disabled={!selectedFileName || state.wordPack === null}
+          >
+            Begin new game
+          </button>
+        </>
       );
       break;
     }
