@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import useAppState from "./hooks/useAppState";
 import { GameResultsList } from "./components/GameResultsList";
@@ -16,6 +16,21 @@ function App() {
 
   useBannedWordData(dispatch);
   useLoadData(dispatch, selectedFileName);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && state.phase === "in-game") {
+        dispatch({ type: "skip-word" });
+        guessInputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      return document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [state.phase, dispatch]);
 
   const availableWordLists = [
     { id: "fruits", fileName: "fruits.txt" },
